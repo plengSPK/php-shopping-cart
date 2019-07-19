@@ -27,7 +27,39 @@ if(!empty($_GET["action"])) {
                                         'image'=>$productByCode["image"]
                                     )
                                 );
-                $_SESSION["cart_item"] = $itemArray;
+
+                if(!empty($_SESSION["cart_item"])) {
+                    // find if new item already in cart
+                    if(in_array($productByCode["code"],array_keys($_SESSION["cart_item"]))) {     
+                        // find that item on cart                 
+                        foreach($_SESSION["cart_item"] as $itemCart){
+                            if($itemCart['code'] == $productByCode["code"]){
+                                // add quantity to item on cart
+                                $_SESSION["cart_item"][$itemCart['code']]['quantity'] += $_POST['quantity'];
+                            }
+                        }
+                    } 
+                    // new item add to cart
+                    else {
+                        $_SESSION["cart_item"] = array_merge($_SESSION["cart_item"],$itemArray);
+                    }
+                } else {
+                    $_SESSION["cart_item"] = $itemArray;
+                }
+
+            }
+            break;
+
+        case "remove":
+            if(!empty($_SESSION["cart_item"])) {
+                foreach($_SESSION["cart_item"] as $itemCart) {
+                    if($_GET['code'] == $itemCart['code']){
+                        unset($_SESSION["cart_item"][$itemCart['code']]);
+                    }
+                    if(empty($_SESSION["cart_item"])){
+                        unset($_SESSION["cart_item"]);
+                    }
+                }
             }
             break;
 
