@@ -11,11 +11,11 @@ class Item {
         return $query->fetchAll();
     }
 
-    public function fetch_data($id){
+    public function fetchByCode($code){
         global $conn;
 
-        $query = $conn->prepare("SELECT * FROM tblproduct WHERE id = ?");
-        $query->bindValue(1, $id);
+        $query = $conn->prepare("SELECT * FROM tblproduct WHERE code = ?");
+        $query->bindValue(1, $code);
         $query->execute();
 
         return $query->fetch();
